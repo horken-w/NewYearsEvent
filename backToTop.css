@@ -1,0 +1,30 @@
+.btn_position{
+	bottom: 5em;
+	right: 6em;
+}
+
+.backtop {
+	position: fixed;
+	bottom: 5em;
+	right: 6em;
+	border-radius: 50%;
+	text-decoration: none;
+	color: hsl(0, 0%, 0%);
+	background-color: hsla(0, 0%, 95%, 0.9);
+	font-size: 12px;
+	padding: 1em;
+	opacity: 0;
+	transition: 500ms opacity ease;
+	pointer-events: none;
+}
+.backtop:hover {	
+	background-color: hsl(0, 0%, 62%);
+	opacity: 1;
+	bottom: 5.5em;
+	transition: 200ms bottom ease;
+}
+.show{
+	opacity: 0.6;
+    transition: 500ms opacity ease;
+	pointer-events: auto;
+}
