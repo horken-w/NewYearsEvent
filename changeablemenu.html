@@ -3,8 +3,11 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta property="og:image" content="http://www.svenbluege.de/demo2/index.php/pageable-list/download/Glasbach/6-jpg/?is_for_sharing=true"/>
+	<meta property="og:url" content="http://www.svenbluege.de/demo2/index.php/pageable-list/singleimage/Glasbach/6-jpg?format=raw"/>
+	<meta property="og:title" content="Glasbach - 6.jpg"/>
 	<title>Changeable menu</title>
-	<link rel="stylesheet" href="backToTop.css">
+	<link rel="stylesheet" href="backToTop.css?2015101205">
 	<style>
 		html, body{margin: 0 auto; padding: 0; width: 100%;}
 		.banner > img{ width: 100%; height: 50vh; margin: 0;}
@@ -48,6 +51,7 @@
 		}
 		.menulg{
 			font-size: 3em;
+			transition: font-size 500ms linear;
 		}
 		.menulg .list{
 			display: inline-block;
@@ -81,6 +85,7 @@
 			<li class="list"><a href="#">item4</a></li>
 		</ul>
 	</nav>
+	<div class="fb-share-button" data-href="http://localhost:8080/cec/frontsite/qa/changeablemenu.html" data-layout="button_count"></div>
 	<section>
 		<article class="posts"><img class="img" src="https://dl.dropboxusercontent.com/u/50502234/dragonair.png" alt="Dragonair">出现在在这登记每年冠军博士广告目光自行形，家庭一切都生物工作经常军事外资中间小子理论分配无论毫不涉，高度围绕老公上海基础上反对红色文，鼓励其实问题较高资讯，保健声明而言有时候介绍回答启动至于当我阶段色情，专门认为干什么南京概念失败好处只需影音处理模型坚持北京垃圾，渐渐接下来附近对待哈尔滨上涨，天下疯狂快速足球快车看法。</article>
 		<article class="posts">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae ab magni, numquam beatae, dolore asperiores eum. Beatae hic perferendis inventore provident minus similique odit, ad eaque at, temporibus saepe aut ducimus labore officia recusandae perspiciatis voluptates necessitatibus! Mollitia laboriosam odit cupiditate cumque debitis officia optio doloribus porro veniam nobis labore dolores, aut dignissimos et blanditiis voluptatem quisquam, unde quam accusamus dolore ipsa vero nisi sunt. Qui beatae laudantium earum quo, eos aut saepe modi, repudiandae nobis nesciunt, possimus blanditiis dicta assumenda sequi sapiente maxime eum debitis similique sint praesentium temporibus voluptatum. Officia dolorem harum sequi unde ab, optio corporis repudiandae consequuntur porro id asperiores iusto quibusdam recusandae vero eveniet, similique ea facilis, consectetur esse! Consequuntur eveniet qui rem earum dolorum!</article>
@@ -89,18 +94,36 @@
 	</section>
 	<script src="https://dl.dropboxusercontent.com/u/50502234/jquery.min.js"></script>
 	<script src="backToTop.js"></script>
+	<div id="fb-root"></div>
 	<script>
+		window.fbAsyncInit = function() {
+			FB.init({appId: '1676383345952645', status: true, cookie: true, xfbml: true, version: 'v2.5'});
+		};
+
+		(function(){
+			var e = document.createElement('script'); e.async = true;
+			e.src = document.location.protocol +
+					'//connect.facebook.net/zh_TW/all.js';
+			document.getElementById('fb-root').appendChild(e);
+		}());
 		$(function(){
-			$('a').on('click', function(e){
+			$('.fb-share-button').click(function(e){
 				e.preventDefault();
-				$('a').removeClass('active');
-				$(this).addClass('active');
-			})
-		})
-		if($(this).scrollTop()>350) $('nav').addClass('menusm').removeClass('menulg');
+				FB.ui({
+					method: 'feed',
+					name: 'This is the content of the "name" field.',
+					link: ' http://www.hyperarts.com/',
+					picture: 'http://www.hyperarts.com/external-xfbml/share-image.gif',
+					caption: 'This is the content of the "caption" field.',
+					description: 'This is the content of the "description" field, below the caption.',
+					message: ''
+				});
+			});
+		});
+		if($(this).scrollTop()>350) $('nav').addClass('menusm');
 		$(this).on('scroll', function(){
-			if($(this).scrollTop()>350) $('nav').addClass('menusm').removeClass('menulg');
-			else $('nav').addClass('menulg').removeClass('menusm');
+			if($(this).scrollTop()>350) $('nav').addClass('menusm');
+			else $('nav').removeClass('menusm');
 		})
 	</script>
 </body>
