@@ -79,6 +79,10 @@ funyear.prototype={
 			height: '179'
 		})).appendTo('.pop_content');
 		$div.clone().addClass('pop_title').text('留言要注意').appendTo('.pop_content');
+		$('<ol/>').appendTo('.pop_content');
+		for(var i=0; i<rulelist.rules.length; i++){
+			$('<li/>').text(rulelist.rules[i]).appendTo($('ol'))
+		};
 		this.closebox();
 		this.runIn();
 	},
@@ -90,8 +94,13 @@ funyear.prototype={
 		close.appendTo('.fb_pop2');
 	},
 	closebox: function(){
-		$('.dropbg').on('click', function(){
-			$('.dropbg').fadeOut(500).remove();
+		$('.close').on('click', function(){
+			$('.dropbg, .fb_pop2').fadeOut(500).delay(500);
+			$('.fb_pop2').stop().animate({top: -9999}, 300);
+			setTimeout(function() {
+				$('.dropbg, .fb_pop2').remove();
+			}, 800);
+			
 		})
 	},
 	runIn: function(){

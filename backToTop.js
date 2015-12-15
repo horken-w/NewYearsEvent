@@ -16,7 +16,9 @@
 		$('.backtop').on('click', this, function(e){
 			e.preventDefault();
 			if(e.data.options.el_tag !== ''){
-				$(e.data.options.el_tag).stop().animate({scrollTop: 0}, e.data.options.durinTime);
+				if(e.data.options.el_tag === 'body' || e.data.options.el_tag === 'html')
+					$('html, body').animate({scrollTop: 0}, e.data.options.durinTime);
+				else $(e.data.options.el_tag).animate({scrollTop: 0}, e.data.options.durinTime);
 			}else if(e.data.options.el_id !== ''){
 				$(e.data.options.el_id).stop().animate({scrollTop: 0}, e.data.options.durinTime);
 			};
