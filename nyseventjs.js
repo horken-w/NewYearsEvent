@@ -1,5 +1,6 @@
 var $div=$('<div />'), $a=$('<a/>');
 var funyear=function(btn){
+	this.profiles={'nickName': '','email':'','fb_photo':'','messageId':''};
 	this.dialog=function(e){
 		switch(e){
 			case 'item3':
@@ -105,32 +106,53 @@ funyear.prototype={
 	},
 	runIn: function(){
 		$('.position').stop().animate({top: 80}, 1000);
+	},
+	loading: function(){
+		this.dropbg();
+		$div.clone().addClass('loadcenter').append($('<img/>', {
+			src: 'images/Loading.gif',
+			alt: 'I\'m wating for you~'
+		})).appendTo('.dropbg');
 	}
 }
 
 $(function(){
-	var accessToken;
 	$.getScript('//connect.facebook.net/zh_TW/sdk.js', function(){
-		FB.init({appId: '1676383345952645', status: true, cookie: true, xfbml: true, version: 'v2.5', channelURL: 'http://fbi.techmore.com.tw:8080/index.html', oauth: true});
-		FB.getLoginStatus(function (response){
-			console.log(response);
-			if (response.status === 'connected') {  
-				var uid = response.authResponse.userID;
-				accessToken = response.authResponse.accessToken;
-			} else {
-				FB.login(function (response) {
-					if (response.authResponse) {
-						var uid = response.authResponse.userID;
-						accessToken = response.authResponse.accessToken;
-					} else {
-						alert('登入失敗!');
-					}
-				}, {
-					scope: 'publish_actions'
-				});
-			}
-		})
-	})
+			FB.init({appId: fbAppId, status: true, cookie: true, xfbml: true, version: 'v2.5', oauth: true});
+			FB.getLoginStatus(function (response){
+				if (response.status === 'connected') {
+					var uid = response.authResponse.userID;
+					accessToken = response.authResponse.accessToken;
+					events.profiles.fb_photo="https://graph.facebook.com/" + uid + "/picture?type=normal";
+					FB.api('/me?fields=email,name', function(response) {
+						events.profiles.nickName=response.name;
+						if(response.email === 'undefined' ) events.profiles.email="";
+						else events.profiles.email=response.email;
+					});
+					events.removebox();
+					events.dialog($this);
+				} else {
+					FB.login(function (response) {
+						if (response.authResponse) {
+							var uid = response.authResponse.userID;
+							accessToken = response.authResponse.accessToken;
+							events.profiles.fb_photo="https://graph.facebook.com/" + uid + "/picture?type=normal";
+							FB.api('/me?fields=email,name', function(response) {
+								if(response.email === 'undefined' ) events.profiles.email="";
+								else events.profiles.email=response.email;
+								events.profiles.nickName=response.name;
+							});
+							events.removebox();
+							events.dialog($this);
+						} else {
+							alert('登入失敗!');
+						}
+					}, {
+						scope: 'publish_actions, email, user_posts'
+					});
+				}
+			})
+		});
 	var events=new funyear();
 	$('.menulg').on('click', function(e){
 		e.preventDefault();
@@ -138,16 +160,19 @@ $(function(){
 	});
 	$('.submite').click(function(e){
 		e.preventDefault();
-		if(confirm('是否發布訊息?')){
-			FB.api(
-			  '/me/feed',
-			  'POST',
-			  {"message":"Hello world~","link":"http://fbi.techmore.com.tw:8080/index.html","title":"繞著臺灣跑‧環島大富翁:::台灣觀光年曆:::"},
-			  function(response) {
-			      console.log(response);
-			  }
-			);
-		}
+		var arg={
+			"message": '2016年，我要參加臺灣觀光年曆中的'+e.data.profiles.activity+ '： ' +e.data.profiles.message,
+			"link": url,
+			"title":"跨出家門Fun個假，年曆旅遊New一下！:::臺灣觀光年曆:::"
+		};
+		FB.api(
+			'/me/feed',
+			'POST',
+			arg,
+			function(response) {
+				e.data.profiles.messageId=response.id;
+			}
+		);
 		/*FB UI*/
 		// $.getScript('//connect.facebook.net/en_US/sdk.js', function(){
 		// 	FB.init({appId: '1676383345952645', status: true, cookie: false, xfbml: true, version: 'v2.5'});
